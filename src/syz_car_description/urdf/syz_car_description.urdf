@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-1-g15f4949  Build Version: 1.6.7594.29634
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="syz_car_description">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.264571064671905 0.211861519229942 -0.103365961549444"
+        rpy="0 0 0" />
+      <mass
+        value="2.82084952980162" />
+      <inertia
+        ixx="0.0108537347537438"
+        ixy="-3.88281684086677E-06"
+        ixz="2.71955747576675E-07"
+        iyy="0.0214097078790024"
+        iyz="-1.22868588338342E-07"
+        izz="0.0122762061428569" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.752941176470588 0.752941176470588 0.752941176470588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/base_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="wheel1_link">
+    <inertial>
+      <origin
+        xyz="9.11372758927165E-08 1.88003679779669E-06 -0.00370987905188275"
+        rpy="0 0 0" />
+      <mass
+        value="0.129014509687169" />
+      <inertia
+        ixx="5.39155623711779E-05"
+        ixy="3.87471912601779E-09"
+        ixz="1.68035046736593E-10"
+        iyy="5.39179162616754E-05"
+        iyz="3.46623619507543E-09"
+        izz="8.92224870472062E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/wheel1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/wheel1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel1_joint"
+    type="continuous">
+    <origin
+      xyz="0.26452 0.23637 0.17924"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="wheel1_link" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="0"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="wheel2_link">
+    <inertial>
+      <origin
+        xyz="-1.71317190811315E-06 7.79670764033957E-07 -0.00370987905188277"
+        rpy="0 0 0" />
+      <mass
+        value="0.129014509687169" />
+      <inertia
+        ixx="5.39149327990439E-05"
+        ixy="-3.62424383422624E-09"
+        ixz="-3.15858454224389E-09"
+        iyy="5.39185458338093E-05"
+        iyz="1.43748837439271E-09"
+        izz="8.92224870472062E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/wheel2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/wheel2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="wheel2_joint"
+    type="continuous">
+    <origin
+      xyz="0.26452 -0.029632 0.17924"
+      rpy="-1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="wheel2_link" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-3.14"
+      upper="3.14"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="link_1">
+    <inertial>
+      <origin
+        xyz="-8.80519884788877E-05 -0.00374495238819089 0.0288132001320856"
+        rpy="0 0 0" />
+      <mass
+        value="0.112783849165394" />
+      <inertia
+        ixx="5.1830398596716E-05"
+        ixy="2.38242388417227E-07"
+        ixz="2.11328178607258E-08"
+        iyy="6.1976580545519E-05"
+        iyz="9.00942539058051E-07"
+        izz="3.72381138653624E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_1"
+    type="continuous">
+    <origin
+      xyz="0.26452 0.10337 0.25124"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="link_1" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="link_2">
+    <inertial>
+      <origin
+        xyz="-0.0407041318692916 0.0924350686844315 0.00177036186863688"
+        rpy="0 0 0" />
+      <mass
+        value="0.352998815464199" />
+      <inertia
+        ixx="0.0023951072107582"
+        ixy="0.00100672905720632"
+        ixz="4.37611097126077E-10"
+        iyy="0.000552242035738037"
+        iyz="-1.29920755164151E-09"
+        izz="0.00285244667674233" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_2"
+    type="continuous">
+    <origin
+      xyz="0.000820732655608836 0.0349903757897514 0.0400000000000669"
+      rpy="1.5707963267949 0 -0.0234516540491958" />
+    <parent
+      link="link_1" />
+    <child
+      link="link_2" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="link_3">
+    <inertial>
+      <origin
+        xyz="0.0938291425296209 0.0574115998371226 0.00344401426035441"
+        rpy="0 0 0" />
+      <mass
+        value="0.210725304344438" />
+      <inertia
+        ixx="0.000429454529008644"
+        ixy="-0.00063153356777493"
+        ixz="-1.76896624061326E-11"
+        iyy="0.0010751661565358"
+        iyz="2.76104292379586E-11"
+        izz="0.00148238272680924" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/link_3.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/link_3.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_3"
+    type="continuous">
+    <origin
+      xyz="-0.081408075886722 0.184869481473932 0.0249999999999999"
+      rpy="0 0 0" />
+    <parent
+      link="link_2" />
+    <child
+      link="link_3" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="link_4">
+    <inertial>
+      <origin
+        xyz="-1.22408428393506E-08 -0.09061974764115 0.001776796262284"
+        rpy="0 0 0" />
+      <mass
+        value="0.316284895686896" />
+      <inertia
+        ixx="0.00210234810603616"
+        ixy="7.48334598074113E-11"
+        ixz="-6.88093736313624E-11"
+        iyy="0.000193570972243419"
+        iyz="-5.09237275744556E-05"
+        izz="0.0020034177336681" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/link_4.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/link_4.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="joint_4"
+    type="continuous">
+    <origin
+      xyz="0.187658300359123 0.114823178436761 -0.025"
+      rpy="0 0 0" />
+    <parent
+      link="link_3" />
+    <child
+      link="link_4" />
+    <axis
+      xyz="0 0 1" />
+  </joint>
+  <link
+    name="paw_link_1">
+    <inertial>
+      <origin
+        xyz="2.26263452418607E-13 0.0265956801554583 0.0120706896959856"
+        rpy="0 0 0" />
+      <mass
+        value="0.0551790477226033" />
+      <inertia
+        ixx="1.50306353157143E-05"
+        ixy="2.5021929384184E-20"
+        ixz="2.38228016415272E-22"
+        iyy="1.15686998567145E-05"
+        iyz="-8.58920394998044E-07"
+        izz="2.11147340300982E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/paw_link_1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/paw_link_1.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="paw_joint_1"
+    type="prismatic">
+    <origin
+      xyz="0 -0.188909859317103 0.0589098593171028"
+      rpy="3.14159265358979 0 0" />
+    <parent
+      link="link_4" />
+    <child
+      link="paw_link_1" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-0.05"
+      upper="0"
+      effort="0"
+      velocity="0" />
+  </joint>
+  <link
+    name="paw_link_2">
+    <inertial>
+      <origin
+        xyz="2.26263452418607E-13 -0.0265956801554582 0.012070689695978"
+        rpy="0 0 0" />
+      <mass
+        value="0.0551790477226033" />
+      <inertia
+        ixx="1.50306353157142E-05"
+        ixy="-1.7878397614176E-20"
+        ixz="1.2837843106823E-20"
+        iyy="1.15686998567145E-05"
+        iyz="8.58920394998043E-07"
+        izz="2.11147340300982E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/paw_link_2.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/paw_link_2.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="paw_joint_2"
+    type="prismatic">
+    <origin
+      xyz="0 -0.188909859317103 -0.0589098593171027"
+      rpy="0 0 0" />
+    <parent
+      link="link_4" />
+    <child
+      link="paw_link_2" />
+    <axis
+      xyz="0 0 -1" />
+    <limit
+      lower="-0.05"
+      upper="0"
+      effort="0"
+      velocity="0" />
+    <mimic
+      joint="paw_joint_1"
+      multiplier="1"
+      offset="0" />
+  </joint>
+  <link
+    name="imu_link">
+    <inertial>
+      <origin
+        xyz="-0.000447470817120654 0.00749999999999998 -0.0048249027237354"
+        rpy="0 0 0" />
+      <mass
+        value="0.018" />
+      <inertia
+        ixx="2.7375E-06"
+        ixy="3.52930394689312E-23"
+        ixz="-2.15284562211879E-22"
+        iyy="3.75E-06"
+        iyz="1.62859024768586E-23"
+        izz="1.6875E-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/imu_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/imu_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imu_joint"
+    type="fixed">
+    <origin
+      xyz="0.26497 0.096543 0.20374"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="imu_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="laser_link">
+    <inertial>
+      <origin
+        xyz="5.55111512312578E-17 0.00782079066487149 -1.38777878078145E-17"
+        rpy="0 0 0" />
+      <mass
+        value="0.00716005581604929" />
+      <inertia
+        ixx="4.17455650326346E-07"
+        ixy="-1.40657640609582E-23"
+        ixz="1.85726527107105E-22"
+        iyy="4.75110314768819E-07"
+        iyz="9.4485711737932E-24"
+        izz="4.17455495962685E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/laser_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/laser_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="laser_joint"
+    type="continuous">
+    <origin
+      xyz="0.35052 0.10337 0.24124"
+      rpy="1.5708 0 3.1416" />
+    <parent
+      link="base_link" />
+    <child
+      link="laser_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="camera_link">
+    <inertial>
+      <origin
+        xyz="-6.55031584528842E-15 0.00131249999999916 -3.99680288865056E-15"
+        rpy="0 0 0" />
+      <mass
+        value="8.97971900151085E-05" />
+      <inertia
+        ixx="2.85316540462069E-10"
+        ixy="-1.37404979080218E-24"
+        ixz="-1.68021061924834E-25"
+        iyy="4.40006231074034E-10"
+        iyz="-2.6035850956461E-24"
+        izz="2.85316540462068E-10" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/camera_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/camera_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="camera_joint"
+    type="fixed">
+    <origin
+      xyz="0.37156 0.13587 0.40493"
+      rpy="-1.5708 0 2.5629" />
+    <parent
+      link="base_link" />
+    <child
+      link="camera_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="round1_link">
+    <inertial>
+      <origin
+        xyz="0 -0.0224623042948903 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.0025156137876412" />
+      <inertia
+        ixx="3.44355456083448E-07"
+        ixy="1.21025558768591E-25"
+        ixz="-6.62565254193244E-15"
+        iyy="3.04549890286932E-08"
+        iyz="-5.2431236727681E-25"
+        izz="3.44355461896161E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/round1_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/round1_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="round1_joint"
+    type="continuous">
+    <origin
+      xyz="0.35052 0.10337 0.18124"
+      rpy="1.5708 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="round1_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+  <link
+    name="round2_link">
+    <inertial>
+      <origin
+        xyz="0 -0.0224623042948903 0"
+        rpy="0 0 0" />
+      <mass
+        value="0.00251561378764121" />
+      <inertia
+        ixx="3.44355456083449E-07"
+        ixy="-2.37201565027914E-24"
+        ixz="-6.62565251604925E-15"
+        iyy="3.04549890286933E-08"
+        iyz="5.30383384596421E-25"
+        izz="3.44355461896162E-07" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/round2_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="package://syz_car_description/meshes/round2_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="round2_joint"
+    type="continuous">
+    <origin
+      xyz="0.178521988305881 0.103367515007061 0.181239553554958"
+      rpy="1.5707963267949 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="round2_link" />
+    <axis
+      xyz="0 1 0" />
+  </joint>
+</robot>

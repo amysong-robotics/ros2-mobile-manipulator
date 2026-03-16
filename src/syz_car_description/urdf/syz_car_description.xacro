@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="syz_car_description">
+
+  <xacro:macro name="box_inertia" params="m w h d">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${m}"/>
+      <inertia ixx="${(m/12)*(h*h+d*d)}" ixy="0" ixz="0" iyy="${(m/12)*(w*w+d*d)}" iyz="0" izz="${(m/12)*(w*w+h*h)}"/>
+    </inertial>
+  </xacro:macro>
+  <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <mass value="${m}"/>
+      <inertia ixx="${(m/12)*(3*r*r+h*h)}" ixy="0" ixz="0" iyy="${(m/12)*(3*r*r+h*h)}" iyz="0" izz="${(m/2)*(r*r)}"/>
+    </inertial>
+  </xacro:macro>
+  <xacro:macro name="sphere_inertia" params="m r">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${(2/5)*m*r*r}" ixy="0" ixz="0" iyy="${(2/5)*m*r*r}" iyz="0" izz="${(2/5)*m*r*r}"/>
+    </inertial>
+  </xacro:macro>
+
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware><plugin>gazebo_ros2_control/GazeboSystem</plugin></hardware>
+    <joint name="joint_1"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="joint_2"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="joint_3"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="joint_4"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="paw_joint_1"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>
+    <joint name="paw_joint_2"><command_interface name="position"/><state_interface name="position"/><state_interface name="velocity"/></joint>   
+  </ros2_control>
+
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <parameters>$(find syz_car_description)/config/my_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+
+  <!-- Diff Drive 插件 -->
+  <gazebo>
+    <plugin name="diff_drive" filename="libgazebo_ros_diff_drive.so">
+      <ros><namespace>/</namespace></ros>
+      <left_joint>wheel1_joint</left_joint>
+      <right_joint>wheel2_joint</right_joint>
+      <wheel_separation>0.266</wheel_separation>
+      <wheel_diameter>0.08</wheel_diameter>
+      <max_wheel_torque>50</max_wheel_torque>
+      <max_wheel_acceleration>2.0</max_wheel_acceleration>
+      
+      <!-- 【重要修改】publish_odom 保持 true (我们需要 odom 话题数据给 EKF) -->
+      <publish_odom>true</publish_odom>
+      
+      <!-- 【CRITICAL FIX】publish_odom_tf 必须改为 false！ -->
+      <!-- 因为我们要用 ekf_node 来发布这个 TF。如果这里是 true，会冲突导致严重抖动 -->
+      <publish_odom_tf>false</publish_odom_tf>
+      
+      <publish_wheel_tf>false</publish_wheel_tf>
+      
+      <odometry_frame>odom</odometry_frame>
+      <robot_base_frame>base_footprint</robot_base_frame>
+    </plugin>
+  </gazebo>
+
+  <!-- base_footprint -->
+  <link name="base_footprint">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><box size="0.001 0.001 0.001" /></geometry>
+    </visual>
+    <inertial>
+      <mass value="0.0001" />
+      <origin xyz="0 0 0" />
+      <inertia ixx="0.0001" ixy="0.0" ixz="0.0" iyy="0.0001" iyz="0.0" izz="0.0001" />
+    </inertial>
+  </link>
+  
+  <joint name="base_joint" type="fixed">
+    <parent link="base_footprint"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 -0.13924" rpy="0 0 3.14159"/>
+  </joint>
+
+  <link name="base_link">
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry><mesh filename="package://syz_car_description/meshes/base_link.STL" /></geometry>
+      <material name=""><color rgba="0.75 0.75 0.75 1" /></material>
+    </visual>
+    <collision>
+      <origin xyz="0.26452 0.10337 0.22" rpy="0 0 0" />
+      <geometry><cylinder radius="0.125" length="0.08"/></geometry>
+    </collision>
+    <inertial>
+      <origin xyz="0.26452 0.10337 0.22" rpy="0 0 0" />
+      <mass value="10.0" />
+      <inertia ixx="0.04" ixy="0.0" ixz="0.0" iyy="0.04" iyz="0.0" izz="0.08" />
+    </inertial>
+  </link>
+
+  <link name="front_camera_link">
+    <visual><geometry><box size="0.02 0.05 0.02"/></geometry><material name="black"><color rgba="0 0 0 1"/></material></visual>
+    <collision><geometry><box size="0.02 0.05 0.02"/></geometry></collision>
+    <inertial><mass value="0.01"/><inertia ixx="1e-4" ixy="0" ixz="0" iyy="1e-4" iyz="0" izz="1e-4"/></inertial>
+  </link>
+
+  <joint name="front_camera_joint" type="fixed">
+    <origin xyz="0.38 0.13 0.2" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="front_camera_link" />
+  </joint>
+
+  <gazebo reference="front_camera_link">
+    <sensor type="camera" name="front_camera_sensor">
+      <update_rate>30.0</update_rate>
+      <camera>
+        <horizontal_fov>1.396</horizontal_fov>
+        <image><width>320</width><height>240</height><format>R8G8B8</format></image>
+        <clip><near>0.02</near><far>300</far></clip>
+      </camera>
+      <plugin name="front_camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn>
+        <updateRate>30.0</updateRate>
+        <cameraName>front_camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>front_camera_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+
+  <link name="wheel1_link">
+    <xacro:cylinder_inertia m="0.5" r="0.04" h="0.04"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/wheel1_link.STL" /></geometry><material name=""><color rgba="0.2 0.2 0.2 1" /></material></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0" /><geometry><cylinder radius="0.04" length="0.04"/></geometry></collision>
+  </link>
+  <joint name="wheel1_joint" type="continuous">
+    <origin xyz="0.26452 0.23637 0.17924" rpy="-1.5708 0 0" />
+    <parent link="base_link" />
+    <child link="wheel1_link" />
+    <axis xyz="0 0 1" />
+  </joint>
+
+  <link name="wheel2_link">
+    <xacro:cylinder_inertia m="0.5" r="0.04" h="0.04"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/wheel2_link.STL" /></geometry><material name=""><color rgba="0.2 0.2 0.2 1" /></material></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0" /><geometry><cylinder radius="0.04" length="0.04"/></geometry></collision>
+  </link>
+  <joint name="wheel2_joint" type="continuous">
+    <origin xyz="0.26452 -0.029632 0.17924" rpy="-1.5708 0 0" />
+    <parent link="base_link" />
+    <child link="wheel2_link" />
+    <axis xyz="0 0 1" />
+  </joint>
+
+  <!--<gazebo reference="wheel1_link"><mu1>200</mu1><mu2>100</mu2><kp>10000000.0</kp><kd>1.0</kd><minDepth>0.001</minDepth><maxVel>0.0</maxVel><material>Gazebo/Black</material></gazebo>
+  <gazebo reference="wheel2_link"><mu1>200</mu1><mu2>100</mu2><kp>10000000.0</kp><kd>1.0</kd><minDepth>0.001</minDepth><maxVel>0.0</maxVel><material>Gazebo/Black</material></gazebo>-->
+
+  <link name="link_1">
+    <xacro:box_inertia m="1.0" w="0.1" h="0.1" d="0.1"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/link_1.STL" /></geometry><material name=""><color rgba="1 1 1 1" /></material></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/link_1.STL" /></geometry></collision>
+  </link>
+  <joint name="joint_1" type="revolute">
+    <origin xyz="0.26452 0.10337 0.25124" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="link_1" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100.0" velocity="1.0" />
+    <dynamics damping="5.0" friction="5.0"/>
+  </joint>
+
+  <link name="link_2">
+    <xacro:box_inertia m="0.5" w="0.05" h="0.3" d="0.05"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/link_2.STL" /></geometry><material name=""><color rgba="1 1 1 1" /></material></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/link_2.STL" /></geometry></collision>
+  </link>
+  <joint name="joint_2" type="revolute">
+    <origin xyz="0.00082073 0.03499 0.04" rpy="1.5708 0 -0.0234" />
+    <parent link="link_1" />
+    <child link="link_2" />
+    <axis xyz="0 0 1" />
+    <limit lower="-1.57" upper="1.57" effort="200.0" velocity="1.0" /> 
+    <dynamics damping="10.0" friction="10.0"/>
+  </joint>
+
+  <link name="link_3">
+    <xacro:box_inertia m="0.5" w="0.05" h="0.25" d="0.05"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/link_3.STL" /></geometry><material name=""><color rgba="1 1 1 1" /></material></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/link_3.STL" /></geometry></collision>
+  </link>
+  <joint name="joint_3" type="revolute">
+    <origin xyz="-0.0814 0.1848 0.025" rpy="0 0 0" />
+    <parent link="link_2" />
+    <child link="link_3" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="100.0" velocity="1.0" />
+    <dynamics damping="2.0" friction="2.0"/>
+  </joint>
+
+  <link name="link_4">
+    <xacro:box_inertia m="0.5" w="0.05" h="0.1" d="0.05"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/link_4.STL" /></geometry><material name=""><color rgba="1 1 1 1" /></material></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/link_4.STL" /></geometry></collision>
+  </link>
+  <joint name="joint_4" type="revolute">
+    <origin xyz="0.1876 0.1148 -0.025" rpy="0 0 0" />
+    <parent link="link_3" />
+    <child link="link_4" />
+    <axis xyz="0 0 1" />
+    <limit lower="-3.14" upper="3.14" effort="50.0" velocity="1.0" />
+    <dynamics damping="1.0" friction="1.0"/>
+  </joint>
+  
+  <link name="gripper_center_link">
+    <inertial>
+      <mass value="0.01"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry><sphere radius="0.005"/></geometry>
+      <material name="red"><color rgba="1 0 0 1"/></material>
+    </visual>
+  </link>
+
+  <joint name="gripper_center_joint" type="revolute">
+    <origin xyz="0 -0.1889 0" rpy="0 0 0" />
+    <parent link="link_4" />
+    <child link="gripper_center_link" />
+    <axis xyz="0 0 1" />
+    <limit lower="0" upper="0" effort="0" velocity="0" />
+  </joint>
+
+  <link name="paw_link_1">
+    <xacro:box_inertia m="0.05" w="0.02" h="0.05" d="0.02"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/paw_link_1.STL" /></geometry><material name=""><color rgba="1 1 1 1" /></material></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/paw_link_1.STL" /></geometry></collision>
+  </link>
+  <joint name="paw_joint_1" type="prismatic">
+    <origin xyz="0 -0.1889 0.0589" rpy="3.1415 0 0" />
+    <parent link="link_4" />
+    <child link="paw_link_1" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-0.05" upper="0.2" effort="10" velocity="0.5" />
+  </joint>
+
+  <link name="paw_link_2">
+    <xacro:box_inertia m="0.05" w="0.02" h="0.05" d="0.02"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/paw_link_2.STL" /></geometry><material name=""><color rgba="1 1 1 1" /></material></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/paw_link_2.STL" /></geometry></collision>
+  </link>
+  <joint name="paw_joint_2" type="prismatic">
+    <origin xyz="0 -0.1889 -0.0589" rpy="0 0 0" />
+    <parent link="link_4" />
+    <child link="paw_link_2" />
+    <axis xyz="0 0 -1" />
+    <limit lower="-0.05" upper="0.2" effort="10" velocity="0.5" />
+  </joint>
+
+  <link name="imu_link">
+    <visual><origin xyz="0 0 0" rpy="0 0 0"/><geometry><mesh filename="package://syz_car_description/meshes/imu_link.STL"/></geometry></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0"/><geometry><box size="0.02 0.02 0.01"/></geometry></collision>
+    <inertial><mass value="0.01"/><inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/></inertial>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="0.26497 0.096543 0.20374" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="imu_link" />
+  </joint>
+  <gazebo reference="imu_link">
+    <sensor name="imu_sensor" type="imu">
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <ros><namespace>/</namespace><remapping>~/out:=imu</remapping></ros>
+        <initial_orientation_as_reference>false</initial_orientation_as_reference>
+      </plugin>
+      <always_on>true</always_on><update_rate>100</update_rate>
+    </sensor>
+  </gazebo>
+
+  <link name="laser_link">
+    <visual><origin xyz="0 0 0" rpy="0 0 0"/><geometry><mesh filename="package://syz_car_description/meshes/laser_link.STL"/></geometry></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0"/><geometry><cylinder radius="0.03" length="0.04"/></geometry></collision>
+    <inertial><mass value="0.1"/><inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/></inertial>
+  </link>
+  <joint name="laser_joint" type="fixed">
+    <origin xyz="0.35052 0.10337 0.20" rpy="0 0 0" />
+    <parent link="base_link" />
+    <child link="laser_link" />
+  </joint>
+  
+  <gazebo reference="laser_link">
+    <sensor name="lidar" type="ray">
+      <always_on>true</always_on>
+      <visualize>true</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan><horizontal><samples>360</samples><resolution>1.0</resolution><min_angle>0.0</min_angle><max_angle>6.28</max_angle></horizontal></scan>
+        <range><min>0.25</min><max>12.0</max></range>
+      </ray>
+      <plugin name="scan" filename="libgazebo_ros_ray_sensor.so">
+        <ros><remapping>~/out:=scan</remapping></ros>
+        <output_type>sensor_msgs/LaserScan</output_type>
+        <frame_name>laser_link</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <link name="camera_link">
+    <visual><origin xyz="0 0 0" rpy="0 0 0"/><geometry><mesh filename="package://syz_car_description/meshes/camera_link.STL"/></geometry></visual>
+    <collision><origin xyz="0 0 0" rpy="0 0 0"/><geometry><box size="0.02 0.02 0.02"/></geometry></collision>
+    <inertial><mass value="0.05"/><inertia ixx="1e-5" ixy="0" ixz="0" iyy="1e-5" iyz="0" izz="1e-5"/></inertial>
+  </link>
+  <joint name="camera_joint" type="fixed">
+    <origin xyz="0 -0.1889 0.0" rpy="0 0 0" />
+    <parent link="link_4" />
+    <child link="camera_link" />
+  </joint>
+  <gazebo reference="camera_link">
+    <sensor type="camera" name="camera1">
+      <update_rate>30.0</update_rate>
+      <camera name="head">
+        <horizontal_fov>1.396</horizontal_fov>
+        <image><width>800</width><height>800</height><format>R8G8B8</format></image>
+        <clip><near>0.02</near><far>300</far></clip>
+      </camera>
+      <plugin name="camera_controller" filename="libgazebo_ros_camera.so">
+        <alwaysOn>true</alwaysOn><updateRate>0.0</updateRate>
+        <cameraName>camera</cameraName>
+        <imageTopicName>image_raw</imageTopicName>
+        <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+        <frameName>camera_link</frameName>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <link name="round1_link">
+    <xacro:sphere_inertia m="0.05" r="0.025"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/round1_link.STL" /></geometry><material name=""><color rgba="1 1 1 1" /></material></visual>
+    <collision><origin xyz="0 -0.02 0" rpy="0 0 0" /><geometry><sphere radius="0.021"/></geometry></collision>
+  </link>
+  <joint name="round1_joint" type="fixed">
+    <origin xyz="0.35052 0.10337 0.18124" rpy="1.5708 0 0" />
+    <parent link="base_link" />
+    <child link="round1_link" />
+    <axis xyz="0 1 0" /> 
+  </joint>
+
+  <link name="round2_link">
+    <xacro:sphere_inertia m="0.05" r="0.025"/>
+    <visual><origin xyz="0 0 0" rpy="0 0 0" /><geometry><mesh filename="package://syz_car_description/meshes/round2_link.STL" /></geometry><material name=""><color rgba="1 1 1 1" /></material></visual>
+    <collision><origin xyz="0 -0.02 0" rpy="0 0 0" /><geometry><sphere radius="0.021"/></geometry></collision>
+  </link>
+  <joint name="round2_joint" type="fixed">
+    <origin xyz="0.178521988305881 0.103367515007061 0.181239553554958" rpy="1.5707963267949 0 0" />
+    <parent link="base_link" />
+    <child link="round2_link" />
+    <axis xyz="0 1 0" /> 
+  </joint>
+
+  <gazebo reference="round1_link"><mu1>0.0</mu1><mu2>0.0</mu2></gazebo>
+  <gazebo reference="round2_link"><mu1>0.0</mu1><mu2>0.0</mu2></gazebo>
+  
+  <gazebo>
+    <plugin name="vacuum_gripper" filename="libgazebo_ros_vacuum_gripper.so">
+      <ros>
+        <namespace>/</namespace>
+        <remapping>switch:=gripper_switch</remapping>
+      </ros>
+      <link_name>gripper_center_link</link_name>
+      <max_force>10000000.0</max_force>
+      <max_distance>0.2</max_distance>
+      <fixed>fixed</fixed>
+    </plugin>
+  </gazebo>
+
+</robot>

@@ -1,0 +1,50 @@
+controller_manager:
+  ros__parameters:
+    update_rate: 100  # Hz
+
+    # 1. 关节状态广播器 (必须有)
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    # 2. 机械臂控制器 (必须有)
+    arm_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    # 3. 夹爪控制器 (新增！必须加这个，否则launch文件会报错)
+    gripper_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+# ----------------------------------------------------------------
+# 机械臂具体参数
+# ----------------------------------------------------------------
+arm_controller:
+  ros__parameters:
+    joints:
+      - joint_1
+      - joint_2
+      - joint_3
+      - joint_4
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    # 这些参数对仿真很有帮助，能防止因为一点点物理误差导致控制器卡死
+    open_loop_control: true
+    allow_partial_joints_goal: true
+
+# ----------------------------------------------------------------
+# 夹爪具体参数 (你之前漏掉的部分)
+# ----------------------------------------------------------------
+gripper_controller:
+  ros__parameters:
+    joints:
+      - paw_joint_1  
+      - paw_joint_2 
+    command_interfaces:
+      - position
+    state_interfaces:
+      - position
+      - velocity
+    open_loop_control: true
+    allow_partial_joints_goal: true
