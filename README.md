@@ -106,7 +106,7 @@ ros2 launch syz_car_description slam.launch.py
 ```
 After mapping, save your map.
 <div align="center">
-  <img src="assets/slam_mapping.gif" width="700"/>
+  <img src="gif/slam_mapping.gif" width="700"/>
   <br/>
   <sup><em>Live SLAM process in Gazebo and RViz.</em></sup>
 </div>
@@ -118,7 +118,7 @@ ros2 launch syz_car_navigation navigation.launch.py
 ```
 You can then use the "Nav2 Goal" button in RViz to set a destination.
 <div align="center">
-  <img src="assets/autonomous_navigation.gif" width="700"/>
+  <img src="gif/autonomous_navigation.gif" width="700"/>
   <br/>
   <sup><em>Nav2 successfully guiding the robot to the goal.</em></sup>
 </div>
@@ -137,12 +137,12 @@ ros2 launch syz_car_grasping fetch_coke.py
 ```
 Now you can use voice commands or hand gestures to initiate complex tasks.
 <div align="center">
-  <img src="assets/voice_control_grasp.gif" width="700"/>
+  <img src="gif/voice_control_grasp.gif" width="700"/>
   <br/>
   <sup><em>Triggering a grasp action using a voice command.</em></sup>
 </div>
 <div align="center">
-  <img src="assets/gesture_control.gif" width="700"/>
+  <img src="gif/gesture_control.gif" width="700"/>
   <br/>
   <sup><em>Initiating a task and manually controlling the robot via hand gestures.</em></sup>
 </div>
