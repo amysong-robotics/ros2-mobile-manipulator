@@ -13,17 +13,17 @@ An advanced, open-source autonomous mobile manipulator built on ROS 2. This proj
 </div>
 
 ## 📖 Table of Contents
-* [🌟 Key Features](#-key-features)
-*[🛠️ System Architecture](#️-system-architecture)
+*[🌟 Key Features](#-key-features)
+* [🛠️ System Architecture](#️-system-architecture)
 * [🚀 Getting Started](#-getting-started)
-  *[Prerequisites](#prerequisites)
-  * [Installation & Workspace Setup](#installation--workspace-setup)
-  *[Build](#build)
-* [🕹️ Usage & Demo](#️-usage--demo)
-  *[1. Simulation & Manual Control](#1-simulation--manual-control)
-  *[2. SLAM & Map Building](#2-slam--map-building)
+  * [Prerequisites](#prerequisites)
+  *[Installation & Workspace Setup](#installation--workspace-setup)
+  * [Build](#build)
+*[🕹️ Usage & Demo](#️-usage--demo)
+  * [1. Simulation & Manual Control](#1-simulation--manual-control)
+  * [2. SLAM & Map Building](#2-slam--map-building)
   * [3. Autonomous Navigation](#3-autonomous-navigation)
-  * [4. Advanced Human-Robot Interaction](#4-advanced-human-robot-interaction)
+  *[4. Advanced Human-Robot Interaction](#4-advanced-human-robot-interaction)
 * [💡 Technical Implementation Details](#-technical-implementation-details)
 * [⚠️ Troubleshooting & Lessons Learned](#️-troubleshooting--lessons-learned)
 
@@ -68,15 +68,15 @@ The core logic operates on a highly concurrent **Multi-threaded Architecture**. 
     ```
 
 4.  **Configure Offline Voice Model:**
-    *   Download the `vosk-model-small-cn-0.22` model from the [Vosk Official Site](https://alphacephei.com/vosk/models).
+    *   Download the `vosk-model-small-cn-0.22` model from the[Vosk Official Site](https://alphacephei.com/vosk/models).
     *   Extract and place the `model` folder into `~/ros2_ws/src/syz_voice_control/syz_voice_control/`.
 
 ### Build
 Compile the workspace and source the overlay:
-    ```bash
-    cd ~/ros2_ws
-    colcon build --symlink-install
-    source install/setup.bash
+```bash
+cd ~/ros2_ws
+colcon build --symlink-install
+source install/setup.bash
     ```
 
 ## 🕹️ Usage & Demo
@@ -87,10 +87,10 @@ Compile the workspace and source the overlay:
 Launch the Gazebo physics environment and control the robot via keyboard teleoperation.
     ```bash
     # Terminal 1: Launch Gazebo world
-    ros2 launch syz_car_gazebo gazebo.launch.py
+ros2 launch syz_car_gazebo gazebo.launch.py
 
     # Terminal 2: Run keyboard teleop
-    ros2 run teleop_twist_keyboard teleop_twist_keyboard
+ros2 run teleop_twist_keyboard teleop_twist_keyboard
     ```
 
 ### 2. SLAM & Map Building
