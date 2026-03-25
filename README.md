@@ -13,7 +13,7 @@ An advanced, open-source autonomous mobile manipulator built on ROS 2. This proj
 </div>
 
 ## 📖 Table of Contents
-*[🌟 Key Features](#-key-features)
+* [🌟 Key Features](#-key-features)
 * [🛠️ System Architecture](#️-system-architecture)
 * [🚀 Getting Started](#-getting-started)
   * [Prerequisites](#prerequisites)
@@ -77,7 +77,7 @@ Compile the workspace and source the overlay:
 cd ~/ros2_ws
 colcon build --symlink-install
 source install/setup.bash
-    ```
+```
 
 ## 🕹️ Usage & Demo
 
@@ -85,41 +85,65 @@ source install/setup.bash
 
 ### 1. Simulation & Manual Control
 Launch the Gazebo physics environment and control the robot via keyboard teleoperation.
-    ```bash
-    # Terminal 1: Launch Gazebo world
+```bash
+# Terminal 1: Launch Gazebo world
 ros2 launch syz_car_gazebo gazebo.launch.py
 
-    # Terminal 2: Run keyboard teleop
+# Terminal 2: Run keyboard teleop
 ros2 run teleop_twist_keyboard teleop_twist_keyboard
-    ```
+```
 
 ### 2. SLAM & Map Building
 Drive the robot around to map the unknown environment using LiDAR data.
-    ```bash
-    ros2 launch syz_car_description slam.launch.py
-    ```
+```bash
+ros2 launch syz_car_description slam.launch.py
+```
 *(Don't forget to save your map using the Nav2 map saver CLI once finished!)*
+
+<div align="center">
+  <img src="gif/slam_mapping.gif" width="700"/>
+  <br/>
+  <sup><em>Live SLAM process in Gazebo and RViz.</em></sup>
+</div>
 
 ### 3. Autonomous Navigation
 Launch the Nav2 stack with your pre-built map and send `Nav2 Goal` poses via RViz2.
-    ```bash
-    ros2 launch syz_car_navigation navigation.launch.py
-    ```
+```bash
+ros2 launch syz_car_navigation navigation.launch.py
+```
+
+<div align="center">
+  <img src="gif/autonomous_navigation.gif" width="700"/>
+  <br/>
+  <sup><em>Nav2 successfully guiding the robot to the goal.</em></sup>
+</div>
 
 ### 4. Advanced Human-Robot Interaction (Full System Demo)
 Integrate all subsystems to perform complex voice or gesture-activated retrieval tasks.
-    ```bash
-    # Terminal 1: Launch Gazebo world
-    ros2 launch syz_car_gazebo gazebo.launch.py
+```bash
+# Terminal 1: Launch Gazebo world
+ros2 launch syz_car_gazebo gazebo.launch.py
 
-    # Terminal 2: Launch the Navigation stack
-    ros2 launch syz_car_navigation navigation.launch.py
+# Terminal 2: Launch the Navigation stack
+ros2 launch syz_car_navigation navigation.launch.py
 
-    # Terminal 3: Run the Grasping & Interaction node
-    ros2 run syz_car_grasping fetch_coke
-    ```
-*   **Voice Command:** Say designated keywords to trigger autonomous grasping.
-*   **Gesture Control:** Use camera-facing hand gestures to teleoperate the chassis or control the robotic arm.
+# Terminal 3: Run the Grasping & Interaction node
+ros2 run syz_car_grasping fetch_coke
+```
+
+**Voice-Activated Grasping:**
+<div align="center">
+  <img src="gif/voice_control_grasp.gif" width="700"/>
+  <br/>
+  <sup><em>Triggering a grasp action using a voice command.</em></sup>
+</div>
+
+**Gesture-Based Control:**
+<div align="center">
+  <img src="gif/gesture_control.gif" width="700"/>
+  <br/>
+  <sup><em>Initiating a task and manually controlling the robot via hand gestures.</em></sup>
+</div>
 
 ## 💡 Technical Implementation Details
 <details>
